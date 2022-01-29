@@ -15,7 +15,13 @@ class ServerCore:
             str(e)
 
         self.socket.listen(2)
+
         print("Waiting for a connection, Server Started")
+
+    def __call__(self):
+        self.conn, self.address = self.socket.accept()
+
+        return self.conn
 
     def exit():
         pass
