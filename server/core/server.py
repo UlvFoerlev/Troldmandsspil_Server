@@ -3,25 +3,19 @@ import socket
 
 
 class ServerCore:
-    def __init__(self, port: int = 18818):
-        self.server_ip = getNetworkIp()
+    def __init__(self, port: int = 8910):
+        self.server_ip = "localhost"
         self.port = port
 
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        try:
-            self.socket.bind((self.server_ip, self.port))
-        except socket.error as e:
-            str(e)
-
-        self.socket.listen(2)
-
-        print("Waiting for a connection, Server Started")
-
     def __call__(self):
-        self.conn, self.address = self.socket.accept()
+        print(f"Server started on {self.server_ip}:{self.port}")
+        print("Waiting for incoming connections.")
 
-        return self.conn
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+        self.socket.bind((self.server_ip, self.port))
+
+        return self.socket
 
     def exit():
         pass
