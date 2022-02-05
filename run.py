@@ -1,6 +1,6 @@
-from server.core.server import ServerCore
+from server.core.udp_server import ServerUDPCore
 
 if __name__ == "__main__":
-    core = ServerCore()
+    core = ServerUDPCore()
 
     core()
