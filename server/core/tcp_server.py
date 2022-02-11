@@ -72,24 +72,21 @@ class ServerTCPCore:
         if not self.socket:
             self.open_socket()
 
+        # while True:
         while True:
             events = self.selector.select(timeout=None)
             for key, mask in events:
+                print(key, mask)
                 if key.data is None:
+                    # If connection is self
+                    if key.fileobj == self.socket:
+                        print("Continued")
+                        continue
                     self.authenticate(key.fileobj)
+
                 else:
                     self.service_connection(key, mask)
+            break
 
-        log.info(f"Start listening so socket on {self.server_ip}:{self.port}")
-        self.socket.listen()
-        conn, addr = self.socket.accept()
-        if self.authenticate(conn, addr):
-            with conn:
-                print("Connected by", addr)
-                while True:
-                    data = conn.recv(1024)
-                    if not data:
-                        break
-
-                    # Just echoing right now
-                    conn.sendall(data)
+    def close(self):
+        self.socket.close()
