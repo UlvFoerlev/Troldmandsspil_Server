@@ -48,14 +48,15 @@ class PlayerClientManager:
             datagram.addFloat64(other_player.current_position.p)
             datagram.addFloat64(other_player.current_position.r)
 
-        server.TCPplayerSend(datagram, connection_id)
+        server.TCPPlayerSend(datagram, connection_id)
 
     # Keep player positions updated
-    def updatePlayerPositions(self, server, data):
+    def updatePlayerPositions(self, server, data, force=False):
         # TODO: this should be  handled by UDP, not TCP
-        self.elapsed = globalClock.getDt()
-        self.timeSinceLastUpdate += self.elapsed
-        if self.timeSinceLastUpdate > 0.1:
+        elapsed = globalClock.getDt()
+
+        self.timeSinceLastUpdate += elapsed
+        if self.timeSinceLastUpdate > 0.1 or force is True:
             # If any players is active
             if self.active > 0:
                 datagram = PyDatagram()
@@ -79,21 +80,24 @@ class PlayerClientManager:
 
                 # Send Data
                 for player in self.players:
-                    server.TCPplayerSend(datagram, player.connection_id)
+                    server.TCPPlayerSend(datagram, player.connection_id)
 
     # keep chat updated
-    def updateChat(self, server, data):
+    def updateChat(self, server, data: PyDatagram):
+        # get text chat
+        text = data.getString()
+
         datagram = PyDatagram()
 
         # datagram identifier
         datagram.addString("updateChat")
+
         # Add chat text
-        text = data.getString()
-        self.datagram.AddString(text)
+        datagram.addString(text)
 
         # Send Data
         for player in self.players:
-            server.TCPplayerSend(datagram, player.connection_id)
+            server.TCPPlayerSend(datagram, player.connection_id)
 
     def updatePlayers(self, server, data, identifier):
         # TODO: Should only be run if updates are received

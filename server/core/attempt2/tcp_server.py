@@ -77,5 +77,5 @@ class TCPServerCoreMixin:
 
         return Task.cont
 
-    def TCPplayerSend(self, datagram, connection_id):
+    def TCPPlayerSend(self, datagram, connection_id):
         self.TCPconnectionWriter.send(datagram, connection_id)

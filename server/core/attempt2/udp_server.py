@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 class UDPServerCoreMixin:
     def init_udp(self, port, backlog):
         self.UDPconnectionManager = ConnectionManager()
-        self.UDPconnectionWriter = ConnectionWriter(self.UDPconnectionManager)
+        self.UDPconnectionWriter = ConnectionWriter(self.UDPconnectionManager, 2)
         self.UDPconnectionReader = RecentConnectionReader(self.UDPconnectionManager)
         self.UDPconnectionReader.setRawMode(1)
 
@@ -21,6 +21,7 @@ class UDPServerCoreMixin:
         self.backlog = backlog
 
     def run_udp(self):
+        return
         # Run Server
         log.info(f"Starting UDP server on {self.port}")
 
